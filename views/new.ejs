@@ -1,0 +1,18 @@
+
+<!-- header view partial -->
+<% include partials/header.ejs %>
+
+
+<h1>Create a New Campground</h1>
+
+<form action="/campgrounds" method="POST">
+    <input type="text" placeholder="name" name="name">
+    <input type="test" placeholder="image url" name="image">
+    <button>Submit</button>
+</form>
+
+
+<a href="/campgrounds">Back to Campgrounds</a>
+
+<!-- footer view partial -->
+<% include partials/footer.ejs %>
