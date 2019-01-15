@@ -12,6 +12,21 @@ app.use(bodyParser.urlencoded({extended: true}));
     var campgrounds = [
             {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
             {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
+            {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"},
+            {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
+            {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
+            {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"},
+            {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
+            {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
+            {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"},
+            {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
+            {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
+            {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"},
+            {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
+            {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
+            {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"},
+            {name: "Salmon Creek", image: "https://farm3.staticflickr.com/2924/14465824873_026aa469d7.jpg"},
+            {name: "Granite Hill", image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"},
             {name: "Fart Peak", image: "https://pixabay.com/get/e83db40e28fd033ed1584d05fb1d4e97e07ee3d21cac104491f7c57ea1e5b4b0_340.jpg"}
         ];
 
