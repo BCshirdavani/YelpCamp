@@ -14,7 +14,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 // schema setup for mongo db
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 // embed schema into a model
 var Campground = mongoose.model("Campground", campgroundSchema);
@@ -22,7 +23,8 @@ var Campground = mongoose.model("Campground", campgroundSchema);
 // Campground.create(
 //     {
 //         name: "Granite Hill", 
-//         image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg"
+//         image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg",
+//         description: "This is a huge granite hill. No bathrooms, no water."
 //     }, function(err, campground){
 //         if(err){
 //             console.log("error: ", err);
@@ -40,6 +42,7 @@ app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
+//  INDEX route - show all campgrounds
 // camp grounds route
 app.get("/campgrounds", function(req, res){
     // get all campgrounds from mongo db
@@ -50,17 +53,19 @@ app.get("/campgrounds", function(req, res){
         }else{
             // render the file
             console.log("found camp grounds");
-            res.render("campgrounds", {campgrounds:allCampgrounds});
+            res.render("index", {campgrounds:allCampgrounds});
         }
     });
 });
 
+//  CREATE route
 // add campground route
 app.post("/campgrounds", function(req, res){
     // get data from form and add to campgrounds array
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground = {name: name, image: image};
+    var desc = req.body.description;
+    var newCampground = {name: name, image: image, description: desc};
     // create a new campbround, and save to mongo database
     Campground.create(newCampground, function(error, newlyCreated){
         if(error){
@@ -73,10 +78,23 @@ app.post("/campgrounds", function(req, res){
     // redirect back to /campgrounds page
     // res.redirect("/campgrounds");
 });
+
+// NEW route - show form
 // add form for new campground route
 app.get("/campgrounds/new", function(req, res){
     res.render("new.ejs");
 })
+
+// SHOW route - shows more info about one thing
+app.get("/campgrounds/:id", function(req, res){
+   Campground.findById(req.params.id, function(error, foundCampGround){
+       if(error){
+           console.log("error: ", error);
+       } else {
+           res.render("show", {campground: foundCampGround});
+       }
+   });
+});
 
 
 //------------------------------------------------------------------ PORT
