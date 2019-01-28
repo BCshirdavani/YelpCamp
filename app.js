@@ -18,6 +18,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //--------------------------------------------------------------------------
 //------------------------------------------------------------------ ROUTES 
+//  INDEX               /campgrounds                    GET
+//  NEW                 /campgrounds/new                GET
+//  CREATE              /campgrounds                    POST
+//  SHOW                /campgrounds/:id                GET
+//  NEW comment         /campgrounds/:id/comments/new   GET    
+//  CREATE comment      /campgrounds/:id/comments       POST
+
 // landing page
 app.get("/", function(req, res){
     // res.send("this will be the landing page soon...");
@@ -35,7 +42,7 @@ app.get("/campgrounds", function(req, res){
         }else{
             // render the file
             console.log("found camp grounds");
-            res.render("index", {campgrounds:allCampgrounds});
+            res.render("campgrounds/index", {campgrounds:allCampgrounds});
         }
     });
 });
@@ -64,7 +71,7 @@ app.post("/campgrounds", function(req, res){
 //------------------------------- NEW route - show form
 // add form for new campground route
 app.get("/campgrounds/new", function(req, res){
-    res.render("new.ejs");
+    res.render("campgrounds/new.ejs");
 })
 
 //------------------------------- SHOW route - shows more info about one thing
@@ -74,10 +81,47 @@ app.get("/campgrounds/:id", function(req, res){
            console.log("error: ", error);
        } else {
            console.log("found:\n", foundCampGround);
-           res.render("show", {campground: foundCampGround});
+           res.render("campgrounds/show", {campground: foundCampGround});
        }
    });
 })
+
+//  Comments Routes
+//------------------------------- NEW comment
+ app.get("/campgrounds/:id/comments/new", function(req, res){
+     // find campground by id
+     Campground.findById(req.params.id, function(error, campground){
+         if(error){
+             console.log("error: ", error)
+         }else{
+             res.render("comments/new.ejs", {campground: campground});
+         }
+     });
+ });
+ 
+//------------------------------- CREATE comment
+app.post("/campgrounds/:id/comments", function(req, res){
+   // lookup campground using id
+   Campground.findById(req.params.id, function(error, campground){
+       if(error){
+           console.log(error);
+           res.redirect("/campgrounds");
+       }else{
+           // create new comment
+          Comment.create(req.body.comment, function(error, comment){
+              if(error){
+                  console.log(error);
+              }else{
+                  campground.comments.push(comment);
+                  campground.save();
+                  res.redirect("/campgrounds/" + campground._id);
+              }
+          });
+       }
+   });
+});
+
+
 
 
 //------------------------------------------------------------------ PORT
