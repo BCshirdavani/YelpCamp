@@ -3,38 +3,20 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var Campground = require("./models/campground.js");
+var Comment = require("./models/comment.js");
+// var User = require("./models/user.js");
+var seedDB = require("./seeds.js");
 
-mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true });
+
+mongoose.connect("mongodb://localhost:27017/yelp_camp_v3", { useNewUrlParser: true });
+seedDB();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-//------------------------------------------------------------------ DATA
-// schema setup for mongo db
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-// embed schema into a model
-var Campground = mongoose.model("Campground", campgroundSchema);
-// add the existing campgrounds
-// Campground.create(
-//     {
-//         name: "Granite Hill", 
-//         image: "https://farm4.staticflickr.com/3290/3753652230_8139b7c717.jpg",
-//         description: "This is a huge granite hill. No bathrooms, no water."
-//     }, function(err, campground){
-//         if(err){
-//             console.log("error: ", err);
-//         }else{
-//             console.log("newly created campground");
-//             console.log(campground);
-//         }
-//     });
-
-
+//--------------------------------------------------------------------------
 //------------------------------------------------------------------ ROUTES 
 // landing page
 app.get("/", function(req, res){
@@ -42,7 +24,7 @@ app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-//  INDEX route - show all campgrounds
+//-------------------------------  INDEX route - show all campgrounds
 // camp grounds route
 app.get("/campgrounds", function(req, res){
     // get all campgrounds from mongo db
@@ -58,7 +40,7 @@ app.get("/campgrounds", function(req, res){
     });
 });
 
-//  CREATE route
+//------------------------------- CREATE route
 // add campground route
 app.post("/campgrounds", function(req, res){
     // get data from form and add to campgrounds array
@@ -66,7 +48,7 @@ app.post("/campgrounds", function(req, res){
     var image = req.body.image;
     var desc = req.body.description;
     var newCampground = {name: name, image: image, description: desc};
-    // create a new campbround, and save to mongo database
+    // create a new campgraound, and save to mongo database
     Campground.create(newCampground, function(error, newlyCreated){
         if(error){
             console.log("error:", error)
@@ -79,22 +61,23 @@ app.post("/campgrounds", function(req, res){
     // res.redirect("/campgrounds");
 });
 
-// NEW route - show form
+//------------------------------- NEW route - show form
 // add form for new campground route
 app.get("/campgrounds/new", function(req, res){
     res.render("new.ejs");
 })
 
-// SHOW route - shows more info about one thing
+//------------------------------- SHOW route - shows more info about one thing
 app.get("/campgrounds/:id", function(req, res){
-   Campground.findById(req.params.id, function(error, foundCampGround){
+   Campground.findById(req.params.id).populate("comments").exec(function(error, foundCampGround){
        if(error){
            console.log("error: ", error);
        } else {
+           console.log("found:\n", foundCampGround);
            res.render("show", {campground: foundCampGround});
        }
    });
-});
+})
 
 
 //------------------------------------------------------------------ PORT

@@ -9,6 +9,12 @@
 
 <p><%= campground.description %></p>
 
+<% campground.comments.forEach(function(comment){ %>
+    <p> 
+        <strong>  <%= comment.author %> </strong> - <%= comment.text %> 
+    </p>
+<% }) %>
+
 
 <!-- footer view partial -->
 <% include partials/footer.ejs %>
