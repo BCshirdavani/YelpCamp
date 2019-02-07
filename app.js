@@ -21,7 +21,7 @@ var indexRoutes         = require("./routes/index");
 
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp_v3", { useNewUrlParser: true });
-seedDB();
+// seedDB();    // seed the database
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));         // include css style directory
