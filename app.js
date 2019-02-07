@@ -107,8 +107,8 @@ app.get("/campgrounds/:id", function(req, res){
 })
 
 //  Comments Routes
-//------------------------------- NEW comment
- app.get("/campgrounds/:id/comments/new", function(req, res){
+//------------------------------- NEW comment - middleware blocks if not logged in
+ app.get("/campgrounds/:id/comments/new",isLoggedIn ,function(req, res){
      // find campground by id
      Campground.findById(req.params.id, function(error, campground){
          if(error){
@@ -120,7 +120,7 @@ app.get("/campgrounds/:id", function(req, res){
  });
  
 //------------------------------- CREATE comment
-app.post("/campgrounds/:id/comments", function(req, res){
+app.post("/campgrounds/:id/comments", isLoggedIn, function(req, res){
    // lookup campground using id
    Campground.findById(req.params.id, function(error, campground){
        if(error){
@@ -178,6 +178,20 @@ app.post("/login", passport.authenticate("local",
 });
 
 
+//------------------------------- Logout Route
+app.get("/logout", function(req, res) {
+   req.logout();
+   res.redirect("/campgrounds");
+});
+
+
+//------------------------------- is logged in middle ware
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }  
+    res.redirect("/login");
+};
 
 
 
