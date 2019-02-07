@@ -3,12 +3,15 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var passport = require('passport');
+var LocalStrategy = require("passport-local");
+var User = require("./models/user");
 var Campground = require("./models/campground.js");
 var Comment = require("./models/comment.js");
 // var User = require("./models/user.js");
 var seedDB = require("./seeds.js");
-var passport = require('passport');
-var LocalStrategy = require("passport-local");
+
+
 
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp_v3", { useNewUrlParser: true });
@@ -16,6 +19,20 @@ seedDB();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));         // include css style directory
+
+
+//-------------------------------  passport configuration
+app.use(require("express-session")({
+    secret: "ducks fart",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 
 
@@ -123,6 +140,31 @@ app.post("/campgrounds/:id/comments", function(req, res){
        }
    });
 });
+
+//=============================================
+// AUTH ROUTES
+//=============================================
+//------------------------------- show register form
+app.get("/register", function(req, res){
+    res.render("register");
+});
+//------------------------------- Sign Up Logic
+app.post("/register", function(req, res) {
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(error, user){
+        if(error){
+            console.log(error);
+            res.render("register");
+        }else{
+            passport.authenticate("local")(req, res, function(){
+                res.redirect("/campgrounds");  
+            });
+        }
+    });
+});
+
+
+
 
 
 
