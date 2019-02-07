@@ -33,6 +33,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// make middle ware to run on every single route, so they can all handle the logged in user data
+app.use(function(req, res, next){
+   res.locals.currentUser = req.user;
+   next();
+});
 
 
 
@@ -54,6 +59,7 @@ app.get("/", function(req, res){
 //-------------------------------  INDEX route - show all campgrounds
 // camp grounds route
 app.get("/campgrounds", function(req, res){
+    console.log("req.user: ", req.user);
     // get all campgrounds from mongo db
     Campground.find({}, function(error, allCampgrounds){
         if(error){
@@ -62,7 +68,7 @@ app.get("/campgrounds", function(req, res){
         }else{
             // render the file
             console.log("found camp grounds");
-            res.render("campgrounds/index", {campgrounds:allCampgrounds});
+            res.render("campgrounds/index", {campgrounds:allCampgrounds, currentUser: req.user});
         }
     });
 });
