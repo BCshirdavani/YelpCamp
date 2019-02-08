@@ -26,18 +26,24 @@ router.get("/", function(req, res){
 
 //------------------------------- CREATE route
 // add campground route
-router.post("/", function(req, res){
+router.post("/", isLoggedIn, function(req, res){
     // get data from form and add to campgrounds array
     var name = req.body.name;
     var image = req.body.image;
-    var desc = req.body.description;
-    var newCampground = {name: name, image: image, description: desc};
+    var desc = req.body.description
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    var newCampground = {name: name, image: image, description: desc, author};
+    console.log("~~~ req.user: ", req.user);
     // create a new campgraound, and save to mongo database
     Campground.create(newCampground, function(error, newlyCreated){
         if(error){
             console.log("error:", error)
         }else{
             // redirect back to /campgrounds page
+            console.log("~~~ new campground: ", newlyCreated);
             res.redirect("/campgrounds");
         }
     });
@@ -47,20 +53,23 @@ router.post("/", function(req, res){
 
 //------------------------------- NEW route - show form
 // add form for new campground route
-router.get("/new", function(req, res){
+router.get("/new", isLoggedIn, function(req, res){
     res.render("campgrounds/new.ejs");
 })
 
 //------------------------------- SHOW route - shows more info about one thing
+// SHOW - shows more info about one campground
 router.get("/:id", function(req, res){
-   Campground.findById(req.params.id).populate("comments").exec(function(error, foundCampGround){
-       if(error){
-           console.log("error: ", error);
-       } else {
-           console.log("found:\n", foundCampGround);
-           res.render("campgrounds/show", {campground: foundCampGround});
-       }
-   });
+    //find the campground with provided ID
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(foundCampground)
+            //render show template with that campground
+            res.render("campgrounds/show", {campground: foundCampground});
+        }
+    });
 });
 
 //------------------------------- is logged in middle ware
