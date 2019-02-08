@@ -10,6 +10,7 @@ var Campground = require("./models/campground.js");
 var Comment = require("./models/comment.js");
 // var User = require("./models/user.js");
 var seedDB = require("./seeds.js");
+var methodOverride = require("method-override");
 
 
 // requiring routes
@@ -25,6 +26,7 @@ mongoose.connect("mongodb://localhost:27017/yelp_camp_v9", { useNewUrlParser: tr
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));         // include css style directory
+app.use(methodOverride("_method"));                     // override for PUT
 
 
 //-------------------------------  passport configuration
