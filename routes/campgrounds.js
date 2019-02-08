@@ -100,6 +100,31 @@ router.put("/:id", function(req, res){
 });
 
 
+//------------------------------- DESTROY route 
+router.delete("/:id", function(req, res){
+    Campground.findByIdAndRemove(req.params.id, function(error){
+        if(error){
+            console.log("error: ", error);
+            res.redirect("/campgrounds");
+        }else{
+            res.redirect("/campgrounds");
+        }
+    });
+});
+
+// router.delete("/:id",function(req, res){
+//   Campground.findByIdAndRemove(req.params.id, function(err){
+//       if(err){
+//           res.redirect("/campgrounds");
+//       } else {
+//           res.redirect("/campgrounds");
+//       }
+//   });
+// });
+
+
+
+
 
 
 //------------------------------- is logged in middle ware
