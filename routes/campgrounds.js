@@ -73,22 +73,16 @@ router.get("/:id", function(req, res){
 });
 
 //------------------------------- EDIT route 
-router.get("/:id/edit", function(req, res){
+router.get("/:id/edit", checkCampgroundOwnership, function(req, res){
     Campground.findById(req.params.id, function(error, foundCampground){
-       if(error){
-           console.log("error: ", error);
-           res.redirect("/campgrounds");
-       } else {
-           res.render("campgrounds/edit", {campground: foundCampground});
-       }
+        res.render("campgrounds/edit", {campground: foundCampground});
     });
-    
 });
 
 
 
 //------------------------------- UDPATE route 
-router.put("/:id", function(req, res){
+router.put("/:id", checkCampgroundOwnership, function(req, res){
     // find and update correct campground, then redirect to show
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(error, updatedCampground){
         if (error){
@@ -101,7 +95,7 @@ router.put("/:id", function(req, res){
 
 
 //------------------------------- DESTROY route 
-router.delete("/:id", function(req, res){
+router.delete("/:id", checkCampgroundOwnership, function(req, res){
     Campground.findByIdAndRemove(req.params.id, function(error){
         if(error){
             console.log("error: ", error);
@@ -127,12 +121,41 @@ router.delete("/:id", function(req, res){
 
 
 
-//------------------------------- is logged in middle ware
+//------------------------------- is logged in middleware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }  
     res.redirect("/login");
 };
+
+
+//------------------------------- check ownership middlewayre
+function checkCampgroundOwnership(req, res, next){
+    if(req.isAuthenticated()){
+        Campground.findById(req.params.id, function(error, foundCampground){
+           if(error){
+               console.log("error: ", error);
+               res.redirect("back");
+           } else {
+               // check if user owns the campground
+               console.log(typeof foundCampground.author.id,foundCampground.author.id); // mongoose object
+               console.log(typeof req.user._id, req.user._id);                          // string
+               console.log(req.user._id === foundCampground.author.id);                 // not the same
+               if(foundCampground.author.id.equals(req.user._id)){
+                   console.log("user/owner matches");
+                   next();
+               } else{
+                   res.redirect("back");
+                   console.log("user/owner does not match");
+               }
+           }
+        });
+    } else{
+        console.log("user is not authenticated..need to log in");
+        res.redirect("back");
+    }
+}
+
 
 module.exports = router;
