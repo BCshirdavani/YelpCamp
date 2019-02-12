@@ -48,9 +48,10 @@ app.use(function(req, res, next){
 });
 
 
-app.use(indexRoutes);
-app.use("/campgrounds/:id/comments",commentRoutes);
+app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);  // append campgrounds to front of these routes
+app.use("/campgrounds/:id/comments", commentRoutes);
+
 
 
 
