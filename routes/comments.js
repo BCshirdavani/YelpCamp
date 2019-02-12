@@ -48,6 +48,31 @@ router.post("/", isLoggedIn, function(req, res){
 });
 
 
+//------------------------------- EDIT comment
+router.get("/:comment_id/edit", function(req, res){
+    Comment.findById(req.params.comment_id, function(error, foundComment){
+        if(error){
+            console.log(error);
+            res.redirect("back");
+        }else{
+            res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+        }
+    });
+});
+
+//------------------------------- UPDATE comment
+router.put("/:comment_id", function(req, res){
+   Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(error, updatatedComment){
+       if(error){
+           res.redirect("back");
+       }else{
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+   });
+});
+
+
+
 //------------------------------- is logged in middle ware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
