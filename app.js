@@ -3,6 +3,7 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var flash = require("connect-flash");
 var passport = require('passport');
 var LocalStrategy = require("passport-local");
 var User = require("./models/user");
@@ -27,6 +28,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));         // include css style directory
 app.use(methodOverride("_method"));                     // override for PUT
+app.use(flash());                                       // used for alert messages
 
 
 //-------------------------------  passport configuration
