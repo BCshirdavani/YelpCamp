@@ -46,6 +46,8 @@ passport.deserializeUser(User.deserializeUser());
 // make middle ware to run on every single route, so they can all handle the logged in user data
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
+   res.locals.error = req.flash("error");
+   res.locals.success = req.flash("success");
    next();
 });
 
