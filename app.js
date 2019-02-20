@@ -22,7 +22,7 @@ var indexRoutes         = require("./routes/index");
 
 
 
-mongoose.connect("mongodb://localhost:27017/yelp_camp_v9", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/yelp_camp_v12", { useNewUrlParser: true });
 // seedDB();    // seed the database
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
