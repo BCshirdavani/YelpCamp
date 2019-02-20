@@ -48,8 +48,6 @@ router.post("/", middleware.isLoggedIn, function(req, res){
             res.redirect("/campgrounds");
         }
     });
-    // redirect back to /campgrounds page
-    // res.redirect("/campgrounds");
 });
 
 //------------------------------- NEW route - show form
@@ -76,6 +74,9 @@ router.get("/:id", function(req, res){
 //------------------------------- EDIT route 
 router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res){
     Campground.findById(req.params.id, function(error, foundCampground){
+        // if(error){
+        //     req.flash("error", "Campground not found");
+        // }
         res.render("campgrounds/edit", {campground: foundCampground});
     });
 });
