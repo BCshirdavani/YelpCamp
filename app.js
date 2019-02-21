@@ -20,9 +20,11 @@ var campgroundRoutes    = require("./routes/campgrounds");
 var indexRoutes         = require("./routes/index");
 
 
+//========================================================= mongo DB for cloud 9
+// mongoose.connect("mongodb://localhost:27017/yelp_camp_v12", { useNewUrlParser: true });
+//========================================================= mongo DB for heroku
+mongoose.connect("mongodb+srv://admin:admin@yelpcamp-mfuqc.mongodb.net/test?retryWrites=true", { useNewUrlParser: true });
 
-
-mongoose.connect("mongodb://localhost:27017/yelp_camp_v12", { useNewUrlParser: true });
 // seedDB();    // seed the database
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
