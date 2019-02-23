@@ -20,6 +20,7 @@ var campgroundRoutes    = require("./routes/campgrounds");
 var indexRoutes         = require("./routes/index");
 
 
+console.log("database url: ", process.env.DATABASEURL);
 //========================================================= mongo DB for cloud 9
 // mongoose.connect("mongodb://localhost:27017/yelp_camp_v12", { useNewUrlParser: true });
 //========================================================= mongo DB for heroku
